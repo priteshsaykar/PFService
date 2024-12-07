@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.service.annotation.GetExchange;
 
+
+// added the comment to check the git working
 @RestController
 @CrossOrigin
 @RequestMapping("/fileUpload")
