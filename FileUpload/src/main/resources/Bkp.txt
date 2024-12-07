@@ -1,0 +1,8 @@
+consul agent -server -bootstrap-expect=1 -data-dir=consul-mfdata -ui -bind=192.168.1.104
+
+
+GitUserName:priteshsaykar
+Pwd:Cr@@tive413
+
+
+Git Token : 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
