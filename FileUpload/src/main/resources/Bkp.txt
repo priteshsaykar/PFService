@@ -1,3 +1,4 @@
 consul agent -server -bootstrap-expect=1 -data-dir=consul-mfdata -ui -bind=192.168.1.104
 
 
+check commit
