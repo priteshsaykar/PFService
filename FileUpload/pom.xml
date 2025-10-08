@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mutualfund</groupId>
-	<artifactId>fileupload</artifactId>
+	<artifactId>PFService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FileUpload</name>
+	<name>PFService</name>
 	<description>Demo project for Spring Boot Microservice</description>
 	<url />
 	<licenses>
