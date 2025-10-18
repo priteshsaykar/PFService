@@ -1,4 +1,6 @@
-consul agent -server -bootstrap-expect=1 -data-dir=consul-mfdata -ui -bind=192.168.1.104
+consul agent -server -bootstrap-expect=1 -data-dir=consul-mfdata1 -ui -bind=192.168.31.94
 
 
+# postgres
+# postgres
 check commit 2
