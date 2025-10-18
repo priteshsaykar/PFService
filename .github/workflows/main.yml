@@ -1,0 +1,41 @@
+name: FileUpload
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+           distribution: 'temurin'
+           java-version: '17'
+ 
+      - name: Build and test with Maven
+        run: mvn clean install
+        working-directory: ./FileUpload
+
+      - name: Print Current Directory
+        run: pwd
+      - name: Debug Repository Structure
+        run: ls -lhR /home/runner/work/${{ github.event.repository.name }}/
+
+
+      - name: Verify Maven Output
+        run: ls -lh /home/runner/work/PFService/FileUpload/target/
+
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t fileupload-image-name -f ./FileUpload/Dockerfile .
+          docker tag fileupload-image-name priteshsaykar/fileupload-image-name:latest
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push priteshsaykar/fileupload-image-name:latest
