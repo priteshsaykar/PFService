@@ -1,5 +1,7 @@
 package com.mutualfund.fileupload.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -18,6 +20,9 @@ public class StockBuyRecord {
     private String month;
     private long netQtyBought;
     private double approxBuyValue;
+    private LocalDate monthStartDate; // NEW FIELD
+
+
 
     // Getters and setters
 }
