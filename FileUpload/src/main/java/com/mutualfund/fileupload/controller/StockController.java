@@ -20,29 +20,60 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-
 @RestController
 @RequestMapping("/api/stocks")
 public class StockController {
 
-    @Autowired
-    private StocksCsvIngestionService ingestionService;
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Upload a CSV file")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "File uploaded successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid file or upload failed")
-    })
-    public ResponseEntity<String> uploadCsv(
-        @Parameter(description = "CSV file to upload", required = true)
-        @RequestParam("file") MultipartFile file) {
+	@Autowired
+	private StocksCsvIngestionService ingestionService;
 
-        try {
-            ingestionService.ingestCsv(file);
-            String filename = Optional.ofNullable(file.getOriginalFilename()).orElse("unknown.csv");
-            return ResponseEntity.ok("File uploaded: " + filename);
-        } catch (IOException e) {
-            return ResponseEntity.badRequest().body("Failed to upload file: " + e.getMessage());
-        }
-    }
+	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(summary = "Upload a CSV file")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "File uploaded successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid file or upload failed") })
+	public ResponseEntity<String> uploadCsv(
+			@Parameter(description = "CSV file to upload", required = true) @RequestParam("file") MultipartFile file) {
+
+		try {
+			ingestionService.ingestCsv(file);
+			String filename = Optional.ofNullable(file.getOriginalFilename()).orElse("unknown.csv");
+			return ResponseEntity.ok("File uploaded: " + filename);
+		} catch (IOException e) {
+			return ResponseEntity.badRequest().body("Failed to upload file: " + e.getMessage());
+		}
+	}
+
+	@PostMapping(value = "/upload-zstock", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(summary = "Upload a CSV file")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "File uploaded successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid file or upload failed") })
+	public ResponseEntity<String> uploadZstockCsv(
+			@Parameter(description = "CSV file to upload", required = true) @RequestParam("file") MultipartFile file) {
+
+		try {
+			ingestionService.ingestZstcokCsv(file);
+			String filename = Optional.ofNullable(file.getOriginalFilename()).orElse("unknown.csv");
+			return ResponseEntity.ok("File uploaded: " + filename);
+		} catch (IOException e) {
+			return ResponseEntity.badRequest().body("Failed to upload file: " + e.getMessage());
+		}
+	}
+	
+	@PostMapping(value = "/upload-istock", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(summary = "Upload a CSV file")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "File uploaded successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid file or upload failed") })
+	public ResponseEntity<String> uploadIstockCsv(
+			@Parameter(description = "CSV file to upload", required = true) @RequestParam("file") MultipartFile file) {
+
+		try {
+			ingestionService.ingestIstcokCsv(file);
+			String filename = Optional.ofNullable(file.getOriginalFilename()).orElse("unknown.csv");
+			return ResponseEntity.ok("File uploaded: " + filename);
+		} catch (IOException e) {
+			return ResponseEntity.badRequest().body("Failed to upload file: " + e.getMessage());
+		}
+	}
+	
+	
 }
