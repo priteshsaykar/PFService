@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mutualfund.fileupload.repository.projection.StockCountProjection;
+import com.mutualfund.fileupload.service.MfCountService;
 import com.mutualfund.fileupload.service.StockBuyCsvIngestionService;
-import com.mutualfund.fileupload.service.StockBuyQueryService;
+
 
 @RestController
 @RequestMapping("/api/stock-buy")
@@ -25,7 +26,7 @@ public class StockBuyController {
     private StockBuyCsvIngestionService ingestionService;
     
     @Autowired
-    private StockBuyQueryService queryService;
+    private MfCountService mfCountService;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
@@ -47,7 +48,7 @@ public class StockBuyController {
 
     @GetMapping("/group-by-stock")
     public ResponseEntity<List<StockCountProjection>> getGroupedStocks(@RequestParam("minCount") int minCount) {
-        return ResponseEntity.ok(queryService.getStocksWithMinCount(minCount));
+        return ResponseEntity.ok(mfCountService.getBuyStocksWithMinCount(minCount));
     }
 
 }

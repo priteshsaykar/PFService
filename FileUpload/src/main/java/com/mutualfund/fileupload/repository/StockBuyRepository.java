@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.mutualfund.fileupload.entity.StockBuyId;
 import com.mutualfund.fileupload.entity.StockBuyRecord;
+import com.mutualfund.fileupload.entity.StockSellRecord;
 import com.mutualfund.fileupload.repository.projection.StockCountProjection;
 
 public interface StockBuyRepository extends JpaRepository<StockBuyRecord, StockBuyId> {
@@ -20,6 +21,12 @@ public interface StockBuyRepository extends JpaRepository<StockBuyRecord, StockB
 		        HAVING COUNT(stock_name) = :minCount
 		    """, nativeQuery = true)
 		    List<StockCountProjection> findStocksWithMinCount(@Param("minCount") int minCount);
+	 
+	 
+	 
+	 @Query(value = "SELECT *  FROM stock_buy_records WHERE TRIM(LOWER(REPLACE(stock_name, 'Ltd.', ''))) LIKE LOWER(:stockNamePart)", nativeQuery = true)
+	 List<StockBuyRecord> findCleanedNamesNative(@Param("stockNamePart") String stockNamePart);
+
 
 
 }
