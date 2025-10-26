@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mutualfund.fileupload.entity.IStock;
 import com.mutualfund.fileupload.entity.Stock;
 import com.mutualfund.fileupload.entity.StockBuyRecord;
 import com.mutualfund.fileupload.entity.StockSellRecord;
@@ -37,11 +38,11 @@ public class PFStocksService {
 	@Autowired
 	private StockBuyRepository stockBuyRepository;
 
-	public Map<String, List<PFStocksDto>> getAllPFStockswithMfCount() {
+	public Map<String, List<PFStocksDto>> getAllZerodhaPFStockswithMfCount() {
 
 		List<Zstock> zStockList = zstockService.getAllZstocks();
 		Map<String, List<PFStocksDto>> pfStockMfDetails = new HashMap<>();
-
+		
 		for (Zstock zStock : zStockList) {
 			List<PFStocksDto> pfStockList = new ArrayList<>();
 			Optional<Stock> stock = stockRepository.findById(zStock.getInstrument());
@@ -49,11 +50,9 @@ public class PFStocksService {
 			if (stock.isPresent()) {
 				String companyName = normalizeCompanyName(stock.get().getCompanyName());
 
-				List<StockSellRecord> stockSellRecordList = stockSellRepository
-						.findCleanedNamesNative(companyName);
+				List<StockSellRecord> stockSellRecordList = stockSellRepository.findCleanedNamesNative(companyName);
 
-				List<StockBuyRecord> stockBuyRecordList = stockBuyRepository
-						.findCleanedNamesNative(companyName);
+				List<StockBuyRecord> stockBuyRecordList = stockBuyRepository.findCleanedNamesNative(companyName);
 
 				for (StockSellRecord stockSellRecord : stockSellRecordList) {
 					PFStocksDto pfStocksDto = new PFStocksDto();
@@ -72,17 +71,66 @@ public class PFStocksService {
 					pfStockList.add(pfStocksDto);
 
 				}
+
+				pfStockList.sort(Comparator.comparing(PFStocksDto::getPfDate));
+
+				if (pfStockList == null || pfStockList.isEmpty())
+					// List is either null or empty
+					System.out.println("No data found for key: yourKey");
+
+				else
+					pfStockMfDetails.put(pfStockList.get(0).getPfStockName(), pfStockList);
 			}
+		}
+		return pfStockMfDetails;
 
-			pfStockList.sort(Comparator.comparing(PFStocksDto::getPfDate));
+	}
 
-			if (pfStockList == null || pfStockList.isEmpty())
-				// List is either null or empty
-				System.out.println("No data found for key: yourKey");
+	public Map<String, List<PFStocksDto>> getAllIciciDirectPFStockswithMfCount() {
 
-			else
-				pfStockMfDetails.put(pfStockList.get(0).getPfStockName(), pfStockList);
+		List<IStock> iStockList = iStockService.getAllStocks();
+		Map<String, List<PFStocksDto>> pfStockMfDetails = new HashMap<>();
+		
+		for (IStock iStock : iStockList) {
+			List<PFStocksDto> pfStockList = new ArrayList<>();
+			// Optional<Stock> stock =
+			// stockRepository.findById(iStock.getId().getStockSymbol());
+			Optional<IStock> optionalIStock = Optional.ofNullable(iStock);
 
+			if (optionalIStock.isPresent()) {
+				String companyName = normalizeCompanyName(optionalIStock.get().getCompanyName());
+
+				List<StockSellRecord> stockSellRecordList = stockSellRepository.findCleanedNamesNative(companyName);
+
+				List<StockBuyRecord> stockBuyRecordList = stockBuyRepository.findCleanedNamesNative(companyName);
+
+				for (StockSellRecord stockSellRecord : stockSellRecordList) {
+					PFStocksDto pfStocksDto = new PFStocksDto();
+					pfStocksDto.setPfcolor("Red");
+					pfStocksDto.setPfDate(stockSellRecord.getMonthStartDate());
+					pfStocksDto.setPfStockName(stockSellRecord.getId().getStockName());
+					pfStockList.add(pfStocksDto);
+
+				}
+
+				for (StockBuyRecord stockBuyRecord : stockBuyRecordList) {
+					PFStocksDto pfStocksDto = new PFStocksDto();
+					pfStocksDto.setPfcolor("Green");
+					pfStocksDto.setPfDate(stockBuyRecord.getMonthStartDate());
+					pfStocksDto.setPfStockName(stockBuyRecord.getId().getStockName());
+					pfStockList.add(pfStocksDto);
+
+				}
+
+				if (pfStockList == null || pfStockList.isEmpty())
+					// List is either null or empty
+					System.out.println("No data found for key: yourKey");
+
+				else {
+					pfStockList.sort(Comparator.comparing(PFStocksDto::getPfDate));
+					pfStockMfDetails.put(pfStockList.get(0).getPfStockName(), pfStockList);
+				}
+			}
 		}
 
 		return pfStockMfDetails;

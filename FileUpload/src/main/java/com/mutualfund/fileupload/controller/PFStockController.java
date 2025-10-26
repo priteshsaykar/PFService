@@ -23,8 +23,15 @@ public class PFStockController {
 	
 	
 	@GetMapping
-    public Map<String,List<PFStocksDto>> getAllStocks() {
-		return pfStocksService.getAllPFStockswithMfCount();
+	@RequestMapping("/zstocks")
+    public Map<String,List<PFStocksDto>> getAllZStocks() {
+		return pfStocksService.getAllZerodhaPFStockswithMfCount();
+    }
+	
+	@GetMapping
+	@RequestMapping("/istocks")
+    public Map<String,List<PFStocksDto>> getAllIStocks() {
+		return pfStocksService.getAllIciciDirectPFStockswithMfCount();
     }
 
 

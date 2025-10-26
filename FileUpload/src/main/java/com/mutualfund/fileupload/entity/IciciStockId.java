@@ -3,8 +3,10 @@ package com.mutualfund.fileupload.entity;
 import java.io.Serializable;
 
 import jakarta.persistence.Embeddable;
+import lombok.Data;
 
 @Embeddable
+@Data
 public class IciciStockId implements Serializable {
 
     private String sourceFile;
